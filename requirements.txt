@@ -1,0 +1,2 @@
+pip install Albumentations
+pip install tqdm

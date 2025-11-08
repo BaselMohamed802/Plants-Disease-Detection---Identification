@@ -29,13 +29,14 @@ def split_dataset():
     create_dir_structure(DEST, classes)
 
     for cls in classes:
-        color_files = list((SRC_COLOR / cls).glob("*.jpg"))
+        color_class_dir = SRC_COLOR / cls
+        seg_class_dir = SRC_SEG / cls
+        color_files = list(color_class_dir.glob("*.jpg"))
         random.shuffle(color_files)
 
         n = len(color_files)
         n_train = int(n * RATIOS[0])
         n_valid = int(n * RATIOS[1])
-
         splits = {
             "train": color_files[:n_train],
             "valid": color_files[n_train:n_train + n_valid],
@@ -44,15 +45,16 @@ def split_dataset():
 
         for split_name, files in splits.items():
             for f in files:
-                seg_file = SRC_SEG / cls / f.name
+                seg_file = seg_class_dir / f"{f.stem}_final_masked.jpg"
                 if not seg_file.exists():
-                    continue  # skip missing pair
+                    print(f"Warning!! Missing segmented file for: {f.name}")
+                    continue
 
                 shutil.copy2(f, DEST / "color" / split_name / cls / f.name)
-                shutil.copy2(seg_file, DEST / "segmented" / split_name / cls / f.name)
+                shutil.copy2(seg_file, DEST / "segmented" / split_name / cls / seg_file.name)
 
-        print(f"{cls}: {n} images split.")
+        print(f"✅ {cls}: {n} images split and copied.")
 
 if __name__ == "__main__":
     split_dataset()
-    print("✅ Dataset split complete.")
+    print("Dataset split complete.")
