@@ -2,3 +2,6 @@
 /PlantVillage
 .vscode/settings.json
 /data
+checkpoint.pth
+plant_segmentation_model_final.pth
+plant_segmentation_model_epoch_10.pth
