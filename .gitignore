@@ -5,3 +5,4 @@
 checkpoint.pth
 plant_segmentation_model_final.pth
 plant_segmentation_model_epoch_10.pth
+plant_classification_model.pth
